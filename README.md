@@ -9,8 +9,9 @@ iOS alarm clock app that is able to play any audio file/youtube link as the alar
 - Alarms can have customized snooze length.
 - Able to start the alarm from the middle of the song and repeat at an arbitrary endpoint, or possibly just terminate.
 - Able to pull song from a youtube link. Possibly cache the song on-device so a wifi connection is not necessary.
+- Alarms can be cancelled early. E.g., if you wake up 5 minutes before the alarm, you can close it so it doesn't go off.
 
-## Deadlines
+## Deadlines:
 - Project description: 10/21
 - Project proposal presentation: 10/23
 - Project update presentation: 11/15
