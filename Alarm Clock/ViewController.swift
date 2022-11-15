@@ -12,15 +12,16 @@ var alarmController = ViewController()
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
+        
+    var alarms: [Alarm] = [Alarm(time: Date(), active: true, repeatDays: ["Monday"], soundLink: "", snoozeTime: 600, snoozeCount: 5, snoozing: false, canSnooze: true), Alarm(time: Date(), active: false, repeatDays: ["Monday", "Tuesday", "Wednesday"], soundLink: "", snoozeTime: 600, snoozeCount: 5, snoozing: false, canSnooze: true)]
     
-    @IBOutlet weak var addAlarmButton: UIBarButtonItem!
-    @IBOutlet weak var editAlarmButton: UIBarButtonItem!
-    
-    var alarms: [Alarm] = [Alarm(time: Date(), active: true, repeatDays: ["Monday"], soundLink: "", snoozeTime: 600, snoozeCount: 5, snoozing: false), Alarm(time: Date(), active: false, repeatDays: ["Monday"], soundLink: "", snoozeTime: 600, snoozeCount: 5, snoozing: false)]
-    
-    let defaultAlarm: Alarm = Alarm(time: Date(), active: true, repeatDays: [""], soundLink: "", snoozeTime: 600, snoozeCount: 5, snoozing: false)
+    let defaultAlarm: Alarm = Alarm(time: Date(), active: true, repeatDays: [""], soundLink: "", snoozeTime: 600, snoozeCount: 5, snoozing: false, canSnooze: true)
     
     var currentAlarm: Alarm?
+    var currentAlarmCache: Alarm?
+    
+    var currentLoc: Int = 0
+    var currentLocCache: Int = 0
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return alarms.count
@@ -45,6 +46,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         alarmController.currentAlarm = alarms[indexPath.row]
+        alarmController.currentAlarmCache = alarms[indexPath.row]
+        alarmController.currentLoc = indexPath.row
+        alarmController.currentLocCache = indexPath.row
     }
 
     @objc func switchDidChange(_ sender: UISwitch) {
@@ -58,13 +62,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         title = "Alarm Clocks"
         setUpTableView()
         alarmController.currentAlarm = defaultAlarm
-    }
-
-    @IBAction func addAlarm(_ sender: Any) {
-        
+        alarmController.currentAlarmCache = defaultAlarm
     }
     
+    @IBSegueAction func addAlarm(_ coder: NSCoder) -> EditAlarmViewController? {
+        alarmController.currentAlarm = defaultAlarm
+        alarmController.currentLoc = -1
+        return EditAlarmViewController(coder: coder)
+    }
     
+    @IBSegueAction func editAlarm(_ coder: NSCoder) -> EditAlarmViewController? {
+        alarmController.currentAlarm = alarmController.currentAlarmCache
+        alarmController.currentLoc = alarmController.currentLocCache
+        return EditAlarmViewController(coder: coder)
+    }
     private func setUpTableView() {
         tableView.dataSource = self
         tableView.delegate = self

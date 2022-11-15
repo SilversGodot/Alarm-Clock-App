@@ -15,4 +15,5 @@ struct Alarm {
     var snoozeTime: Int
     var snoozeCount: Int
     var snoozing: Bool
+    var canSnooze: Bool
 }

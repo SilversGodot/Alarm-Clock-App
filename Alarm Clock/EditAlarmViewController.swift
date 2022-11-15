@@ -14,7 +14,9 @@ class EditAlarmViewController: UIViewController {
     let inactiveButtonColor: UIColor = UIColor.lightGray
     
     @IBOutlet weak var timeLabel: UILabel!
-    
+    @IBOutlet weak var alarmSwitch: UISwitch!
+    @IBOutlet weak var snoozeLabel: UILabel!
+
     @IBOutlet weak var sundayButton: UIButton!
     @IBOutlet weak var mondayButton: UIButton!
     @IBOutlet weak var tuesdayButton: UIButton!
@@ -23,7 +25,10 @@ class EditAlarmViewController: UIViewController {
     @IBOutlet weak var fridayButton: UIButton!
     @IBOutlet weak var saturdayButton: UIButton!
     
-    @IBOutlet weak var timePicker: UIDatePicker!
+    @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var deleteButton: UIButton!
+    
+    @IBOutlet weak var alarmTimePicker: UIDatePicker!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,22 +37,24 @@ class EditAlarmViewController: UIViewController {
         alarm = alarmController.currentAlarm
         
         setTimeLabelText()
-        
-        let xPad = 10
-        var yPad = 100
-        
-        let labelFrame = CGRect(x: xPad, y: yPad, width: Int(view.frame.width), height: 30)
-        yPad += Int(labelFrame.height)
-        yPad += Int(sundayButton.frame.size.height)
-        let timePickerFrame = CGRect(x: xPad, y: yPad, width: Int(view.frame.width), height: 300)
-
         setUpButtons()
         updateButtonColors()
     }
     
+    @IBAction func alarmSwitched(_ sender: Any) {
+        alarm.active = !alarm.active
+    }
+    
     @IBAction func timeChange(_ sender: Any) {
-        alarm.time = timePicker.date
+        alarm.time = alarmTimePicker.date
         setTimeLabelText()
+    }
+    
+    @IBAction func saveButtonPressed(_ sender: Any) {
+        alarmController.alarms.append(alarm)
+    }
+    
+    @IBAction func deleteButtonPressed(_ sender: Any) {
     }
     
     private func setTimeLabelText() {
