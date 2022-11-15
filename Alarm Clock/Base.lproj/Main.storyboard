@@ -84,6 +84,9 @@
                                 <color key="backgroundColor" systemColor="systemGray5Color"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="S" buttonSize="medium"/>
+                                <connections>
+                                    <action selector="sundayButtonPressed:" destination="J0O-T1-F2x" eventType="touchUpInside" id="f6p-7z-g0x"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7uz-8h-qQ7" userLabel="mondayButton">
                                 <rect key="frame" x="60" y="139" width="40" height="40"/>
@@ -91,6 +94,9 @@
                                 <color key="backgroundColor" systemColor="systemGray5Color"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="M" buttonSize="medium"/>
+                                <connections>
+                                    <action selector="mondayButtonPressed:" destination="J0O-T1-F2x" eventType="touchUpInside" id="Y6J-fq-mEe"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3eL-3P-bGD" userLabel="tuesdayButton">
                                 <rect key="frame" x="100" y="139" width="40" height="40"/>
@@ -98,6 +104,9 @@
                                 <color key="backgroundColor" systemColor="systemGray5Color"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="T" buttonSize="medium"/>
+                                <connections>
+                                    <action selector="tuesdayButtonPressed:" destination="J0O-T1-F2x" eventType="touchUpInside" id="JhS-ws-hlO"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cjq-dl-SNw" userLabel="wednesdayButton">
                                 <rect key="frame" x="140" y="139" width="40" height="40"/>
@@ -105,6 +114,9 @@
                                 <color key="backgroundColor" systemColor="systemGray5Color"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="W" buttonSize="medium"/>
+                                <connections>
+                                    <action selector="wednesdayButtonPressed:" destination="J0O-T1-F2x" eventType="touchUpInside" id="F2z-Hd-747"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CJ3-wv-iwN" userLabel="thursdayButton">
                                 <rect key="frame" x="180" y="139" width="40" height="40"/>
@@ -112,6 +124,9 @@
                                 <color key="backgroundColor" systemColor="systemGray5Color"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="T" buttonSize="medium"/>
+                                <connections>
+                                    <action selector="thursdayButtonPressed:" destination="J0O-T1-F2x" eventType="touchUpInside" id="2Wd-qU-arn"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nZe-I4-RNU" userLabel="fridayButton">
                                 <rect key="frame" x="220" y="139" width="40" height="40"/>
@@ -119,6 +134,9 @@
                                 <color key="backgroundColor" systemColor="systemGray5Color"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="F" buttonSize="medium"/>
+                                <connections>
+                                    <action selector="fridayButtonPressed:" destination="J0O-T1-F2x" eventType="touchUpInside" id="4g4-EN-JaZ"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cRM-OU-uEO" userLabel="saturdayButton">
                                 <rect key="frame" x="260" y="139" width="40" height="40"/>
@@ -126,6 +144,9 @@
                                 <color key="backgroundColor" systemColor="systemGray5Color"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="S" buttonSize="medium"/>
+                                <connections>
+                                    <action selector="saturdayButtonPressed:" destination="J0O-T1-F2x" eventType="touchUpInside" id="94N-hv-Pka"/>
+                                </connections>
                             </button>
                             <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="F4s-zS-sw5">
                                 <rect key="frame" x="20" y="202" width="374" height="162"/>
