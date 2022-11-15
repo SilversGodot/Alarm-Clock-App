@@ -19,6 +19,7 @@
 		7FEC2EF82922FDDD0005939A /* AlarmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FEC2EF72922FDDD0005939A /* AlarmModel.swift */; };
 		7FEC2EFB2923066A0005939A /* AlarmTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FEC2EF92923066A0005939A /* AlarmTableViewCell.swift */; };
 		7FEC2EFC2923066A0005939A /* AlarmTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7FEC2EFA2923066A0005939A /* AlarmTableViewCell.xib */; };
+		7FEC2F0229235C730005939A /* EditAlarmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FEC2F0129235C730005939A /* EditAlarmViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		7FEC2EF72922FDDD0005939A /* AlarmModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmModel.swift; sourceTree = "<group>"; };
 		7FEC2EF92923066A0005939A /* AlarmTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmTableViewCell.swift; sourceTree = "<group>"; };
 		7FEC2EFA2923066A0005939A /* AlarmTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlarmTableViewCell.xib; sourceTree = "<group>"; };
+		7FEC2F0129235C730005939A /* EditAlarmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAlarmViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +113,7 @@
 				7FEC2ECD2922F8990005939A /* Main.storyboard */,
 				7FEC2EF92923066A0005939A /* AlarmTableViewCell.swift */,
 				7FEC2EFA2923066A0005939A /* AlarmTableViewCell.xib */,
+				7FEC2F0129235C730005939A /* EditAlarmViewController.swift */,
 				7FEC2EF72922FDDD0005939A /* AlarmModel.swift */,
 				7FEC2ED02922F89B0005939A /* Assets.xcassets */,
 				7FEC2ED22922F89B0005939A /* LaunchScreen.storyboard */,
@@ -272,6 +275,7 @@
 				7FEC2ECC2922F8990005939A /* ViewController.swift in Sources */,
 				7FEC2EF82922FDDD0005939A /* AlarmModel.swift in Sources */,
 				7FEC2EC82922F8990005939A /* AppDelegate.swift in Sources */,
+				7FEC2F0229235C730005939A /* EditAlarmViewController.swift in Sources */,
 				7FEC2ECA2922F8990005939A /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

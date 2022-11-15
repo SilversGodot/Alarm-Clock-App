@@ -13,6 +13,10 @@ class ViewController: UIViewController,UITableViewDataSource {
     
     var alarms: [Alarm] = [Alarm(time: Date(), active: true, repeatDays: ["Monday"], soundLink: "", snoozeTime: 600, snoozeCount: 5, snoozing: false), Alarm(time: Date(), active: false, repeatDays: ["Monday"], soundLink: "", snoozeTime: 600, snoozeCount: 5, snoozing: false)]
     
+    var currentAlarm: Alarm?
+    
+    let defaultAlarm: Alarm = Alarm(time: Date(), active: true, repeatDays: ["Monday"], soundLink: "", snoozeTime: 600, snoozeCount: 5, snoozing: false)
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return alarms.count
     }
@@ -32,6 +36,10 @@ class ViewController: UIViewController,UITableViewDataSource {
         myCell.alarmCellSwitch.tag = indexPath.row
         myCell.alarmCellSwitch.addTarget(self, action: #selector(self.switchDidChange(_:)), for: .valueChanged)
         return myCell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        currentAlarm = alarms[indexPath.row]
     }
 
     @objc func switchDidChange(_ sender: UISwitch) {
@@ -53,8 +61,19 @@ class ViewController: UIViewController,UITableViewDataSource {
     }
     
     private func configureItems() {
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: nil)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addAlarm(sender:)))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editAlarm(sender:)))
+    }
+    
+    @objc private func addAlarm(sender: UIBarButtonItem) {
+        let editVC = EditAlarmViewController()
+        editVC.alarm = defaultAlarm
+        
+        navigationController?.pushViewController(editVC, animated: true)
+    }
+    
+    @objc private func editAlarm(sender: UIBarButtonItem) {
+        
     }
 }
 
