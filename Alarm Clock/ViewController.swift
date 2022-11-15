@@ -42,14 +42,19 @@ class ViewController: UIViewController,UITableViewDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
+        title = "Alarm Clocks"
         setUpTableView()
-        
+        configureItems()
     }
 
     private func setUpTableView() {
         tableView.dataSource = self
         tableView.register(AlarmTableViewCell.nib(), forCellReuseIdentifier: AlarmTableViewCell.id)
+    }
+    
+    private func configureItems() {
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: nil)
     }
 }
 
