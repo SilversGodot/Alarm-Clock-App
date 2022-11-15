@@ -12,7 +12,8 @@ struct Alarm {
     var active: Bool
     var repeatDays: Set<String>
     var soundLink: String
-    var snoozeTime: Int
+    var snoozeTimeMinutes: Int
+    var snoozeTimeSeconds: Int
     var snoozeCount: Int
     var snoozing: Bool
     var canSnooze: Bool

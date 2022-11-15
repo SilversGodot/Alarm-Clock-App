@@ -13,9 +13,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var tableView: UITableView!
         
-    var alarms: [Alarm] = [Alarm(time: Date(), active: true, repeatDays: ["Monday"], soundLink: "", snoozeTime: 600, snoozeCount: 5, snoozing: false, canSnooze: true), Alarm(time: Date(), active: false, repeatDays: ["Monday", "Tuesday", "Wednesday"], soundLink: "", snoozeTime: 600, snoozeCount: 5, snoozing: false, canSnooze: true)]
+    var alarms: [Alarm] = [Alarm(time: Date(), active: true, repeatDays: ["Monday"], soundLink: "", snoozeTimeMinutes: 5, snoozeTimeSeconds: 10, snoozeCount: 5, snoozing: false, canSnooze: true), Alarm(time: Date(), active: false, repeatDays: ["Monday", "Tuesday", "Wednesday"], soundLink: "", snoozeTimeMinutes: 5, snoozeTimeSeconds: 0, snoozeCount: 5, snoozing: false, canSnooze: true)]
     
-    let defaultAlarm: Alarm = Alarm(time: Date(), active: true, repeatDays: [""], soundLink: "", snoozeTime: 600, snoozeCount: 5, snoozing: false, canSnooze: true)
+    let defaultAlarm: Alarm = Alarm(time: Date(), active: true, repeatDays: [""], soundLink: "", snoozeTimeMinutes: 5, snoozeTimeSeconds: 0, snoozeCount: 5, snoozing: false, canSnooze: true)
     
     var currentAlarm: Alarm?
     var currentAlarmCache: Alarm?
@@ -63,6 +63,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         setUpTableView()
         alarmController.currentAlarm = defaultAlarm
         alarmController.currentAlarmCache = defaultAlarm
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        print(alarmController.alarms)
+        tableView.reloadData()
     }
     
     @IBSegueAction func addAlarm(_ coder: NSCoder) -> EditAlarmViewController? {

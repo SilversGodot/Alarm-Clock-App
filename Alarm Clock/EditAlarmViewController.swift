@@ -8,14 +8,61 @@
 import UIKit
 import SwiftUI
 
-class EditAlarmViewController: UIViewController {
+class EditAlarmViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        if pickerView == snoozeTimeMinutesPicker {
+            return maxSnoozeTimeMinutes
+        }
+        else if pickerView == snoozeTimeSecondsPicker {
+            return maxSnoozeTimeSeconds
+        }
+        else {
+            return maxSnoozeCount
+        }
+    }
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        if pickerView == snoozeTimeMinutesPicker {
+            return "\(snoozeTimeMinutesPickerData[row])"
+        }
+        else if pickerView == snoozeTimeSecondsPicker {
+            return "\(snoozeTimeSecondsPickerData[row])"
+        }
+        else {
+            return "\(snoozeCountPickerData[row])"
+        }
+    }
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if pickerView == snoozeTimeMinutesPicker {
+            alarm.snoozeTimeMinutes = row + 1
+        }
+        else if pickerView == snoozeTimeSecondsPicker {
+            alarm.snoozeTimeSeconds = row
+        }
+        else {
+            alarm.snoozeCount = row
+        }
+    }
+    
     var alarm: Alarm!
     let activeButtonColor: UIColor = UIColor.green
     let inactiveButtonColor: UIColor = UIColor.lightGray
+    var snoozeCountPickerData: [Int]!
+    var snoozeTimeMinutesPickerData: [Int]!
+    var snoozeTimeSecondsPickerData: [Int]!
+    let minSnoozeCount = 0
+    let maxSnoozeCount = 30
+    let minSnoozeTimeMinutes = 1
+    let maxSnoozeTimeMinutes = 60
+    let minSnoozeTimeSeconds = 0
+    let maxSnoozeTimeSeconds = 60
     
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var alarmSwitch: UISwitch!
-    @IBOutlet weak var snoozeLabel: UILabel!
 
     @IBOutlet weak var sundayButton: UIButton!
     @IBOutlet weak var mondayButton: UIButton!
@@ -29,16 +76,24 @@ class EditAlarmViewController: UIViewController {
     @IBOutlet weak var deleteButton: UIButton!
     
     @IBOutlet weak var alarmTimePicker: UIDatePicker!
+    @IBOutlet weak var snoozeTimeMinutesPicker: UIPickerView!
+    @IBOutlet weak var snoozeTimeSecondsPicker: UIPickerView!
+    @IBOutlet weak var snoozeCountPicker: UIPickerView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.white
         
+        view.backgroundColor = UIColor.white
         alarm = alarmController.currentAlarm
+        snoozeCountPickerData = Array(stride(from: minSnoozeCount, to: maxSnoozeCount + 1, by: 1))
+        snoozeTimeMinutesPickerData = Array(stride(from: minSnoozeTimeMinutes, to: maxSnoozeTimeMinutes + 1, by: 1))
+        snoozeTimeSecondsPickerData = Array(stride(from: minSnoozeTimeSeconds, to: maxSnoozeTimeSeconds + 1, by: 1))
         
         setTimeLabelText()
         setUpButtons()
         updateButtonColors()
+        setUpSnoozePickers()
     }
     
     @IBAction func alarmSwitched(_ sender: Any) {
@@ -51,10 +106,20 @@ class EditAlarmViewController: UIViewController {
     }
     
     @IBAction func saveButtonPressed(_ sender: Any) {
-        alarmController.alarms.append(alarm)
+        if (alarmController.currentLoc == -1) {
+            alarmController.alarms.append(alarm)
+        }
+        else {
+            alarmController.alarms[alarmController.currentLoc] = alarm
+        }
     }
     
     @IBAction func deleteButtonPressed(_ sender: Any) {
+        if (alarmController.currentLoc != -1) {
+            alarmController.alarms.remove(at: alarmController.currentLoc)
+        }
+        print(alarmController.alarms)
+        self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
     
     private func setTimeLabelText() {
@@ -65,6 +130,20 @@ class EditAlarmViewController: UIViewController {
         df.pmSymbol = "PM"
         let time = df.string(from: alarm.time)
         timeLabel.text = time
+    }
+    
+    private func setUpSnoozePickers() {
+        snoozeCountPicker.dataSource = self
+        snoozeCountPicker.delegate = self
+        snoozeCountPicker.selectRow(alarm.snoozeCount, inComponent: 0, animated: true)
+        
+        snoozeTimeMinutesPicker.dataSource = self
+        snoozeTimeMinutesPicker.delegate = self
+        snoozeTimeMinutesPicker.selectRow(alarm.snoozeTimeMinutes - 1, inComponent: 0, animated: true)
+        
+        snoozeTimeSecondsPicker.dataSource = self
+        snoozeTimeSecondsPicker.delegate = self
+        snoozeTimeSecondsPicker.selectRow(alarm.snoozeTimeSeconds, inComponent: 0, animated: true)
     }
     
     @IBAction func sundayButtonPressed(_ sender: Any) {
