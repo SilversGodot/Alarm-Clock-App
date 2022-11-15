@@ -7,15 +7,20 @@
 
 import UIKit
 
-class ViewController: UIViewController,UITableViewDataSource {
+var alarmController = ViewController()
+
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var addAlarmButton: UIBarButtonItem!
+    @IBOutlet weak var editAlarmButton: UIBarButtonItem!
+    
     var alarms: [Alarm] = [Alarm(time: Date(), active: true, repeatDays: ["Monday"], soundLink: "", snoozeTime: 600, snoozeCount: 5, snoozing: false), Alarm(time: Date(), active: false, repeatDays: ["Monday"], soundLink: "", snoozeTime: 600, snoozeCount: 5, snoozing: false)]
     
-    var currentAlarm: Alarm?
+    let defaultAlarm: Alarm = Alarm(time: Date(), active: true, repeatDays: [""], soundLink: "", snoozeTime: 600, snoozeCount: 5, snoozing: false)
     
-    let defaultAlarm: Alarm = Alarm(time: Date(), active: true, repeatDays: ["Monday"], soundLink: "", snoozeTime: 600, snoozeCount: 5, snoozing: false)
+    var currentAlarm: Alarm?
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return alarms.count
@@ -39,7 +44,7 @@ class ViewController: UIViewController,UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        currentAlarm = alarms[indexPath.row]
+        alarmController.currentAlarm = alarms[indexPath.row]
     }
 
     @objc func switchDidChange(_ sender: UISwitch) {
@@ -52,28 +57,18 @@ class ViewController: UIViewController,UITableViewDataSource {
         // Do any additional setup after loading the view.
         title = "Alarm Clocks"
         setUpTableView()
-        configureItems()
+        alarmController.currentAlarm = defaultAlarm
     }
 
+    @IBAction func addAlarm(_ sender: Any) {
+        
+    }
+    
+    
     private func setUpTableView() {
         tableView.dataSource = self
+        tableView.delegate = self
         tableView.register(AlarmTableViewCell.nib(), forCellReuseIdentifier: AlarmTableViewCell.id)
-    }
-    
-    private func configureItems() {
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addAlarm(sender:)))
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editAlarm(sender:)))
-    }
-    
-    @objc private func addAlarm(sender: UIBarButtonItem) {
-        let editVC = EditAlarmViewController()
-        editVC.alarm = defaultAlarm
-        
-        navigationController?.pushViewController(editVC, animated: true)
-    }
-    
-    @objc private func editAlarm(sender: UIBarButtonItem) {
-        
     }
 }
 
