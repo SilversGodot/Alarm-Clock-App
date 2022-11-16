@@ -14,7 +14,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var tableView: UITableView!
         
-    var alarms: [Alarm] = [Alarm(time: Date(), active: true, repeatDays: ["Monday"], soundLink: "", snoozeTimeMinutes: 5, snoozeTimeSeconds: 10, snoozeCount: 5, snoozing: false, canSnooze: true), Alarm(time: Date(), active: false, repeatDays: ["Monday", "Tuesday", "Wednesday"], soundLink: "", snoozeTimeMinutes: 5, snoozeTimeSeconds: 0, snoozeCount: 5, snoozing: false, canSnooze: true)]
+    var alarms: [Alarm] = [Alarm(time: Date().addingTimeInterval(60), active: true, repeatDays: ["Monday", "Tuesday"], soundLink: "", snoozeTimeMinutes: 5, snoozeTimeSeconds: 10, snoozeCount: 5, snoozing: false, canSnooze: true),
+                           Alarm(time: Date().addingTimeInterval(120), active: false, repeatDays: ["Monday", "Tuesday", "Wednesday"], soundLink: "", snoozeTimeMinutes: 5, snoozeTimeSeconds: 0, snoozeCount: 5, snoozing: false, canSnooze: true)]
     
     let defaultAlarm: Alarm = Alarm(time: Date(), active: true, repeatDays: [""], soundLink: "", snoozeTimeMinutes: 5, snoozeTimeSeconds: 0, snoozeCount: 5, snoozing: false, canSnooze: true)
     
@@ -46,8 +47,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        alarmController.currentAlarm = alarms[indexPath.row]
-        alarmController.currentAlarmCache = alarms[indexPath.row]
+        alarmController.currentAlarm = alarmController.alarms[indexPath.row]
+        alarmController.currentAlarmCache = alarmController.alarms[indexPath.row]
         alarmController.currentLoc = indexPath.row
         alarmController.currentLocCache = indexPath.row
     }
@@ -96,25 +97,25 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     private func scheduleAlarms() {
-        let content = UNMutableNotificationContent()
-        content.title = "Alarm!"
-        content.sound = .default
-        content.body = "Alarm content!"
-        
-        let targetDate = Date().addingTimeInterval(10)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second],
-                                                                                                    from: targetDate),
-                                                    repeats: false)
+        for alarm in alarmController.alarms {
+            let content = UNMutableNotificationContent()
+            content.title = "Alarm!"
+            content.sound = .default
+            content.body = "Alarm content!"
 
-        let request = UNNotificationRequest(identifier: "some_long_id", content: content, trigger: trigger)
-        UNUserNotificationCenter.current().add(request, withCompletionHandler: { error in
-            if error != nil {
-                print("something went wrong")
-            }
-        })
-        
-        print(targetDate)
-        print(Date())
+            let targetDate = alarm.time
+            let trigger = UNCalendarNotificationTrigger(dateMatching: Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second],
+                                                                                                        from: targetDate),
+                                                        repeats: false)
+
+            let request = UNNotificationRequest(identifier: "some_long_id", content: content, trigger: trigger)
+            UNUserNotificationCenter.current().add(request, withCompletionHandler: { error in
+                if error != nil {
+                    print("something went wrong")
+                }
+            })
+            print(targetDate)
+        }
     }
 }
 

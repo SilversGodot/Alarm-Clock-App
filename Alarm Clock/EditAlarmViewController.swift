@@ -86,6 +86,9 @@ class EditAlarmViewController: UIViewController, UIPickerViewDataSource, UIPicke
         
         view.backgroundColor = UIColor.white
         alarm = alarmController.currentAlarm
+        
+        alarmTimePicker.date = alarm.time
+        
         snoozeCountPickerData = Array(stride(from: minSnoozeCount, to: maxSnoozeCount + 1, by: 1))
         snoozeTimeMinutesPickerData = Array(stride(from: minSnoozeTimeMinutes, to: maxSnoozeTimeMinutes + 1, by: 1))
         snoozeTimeSecondsPickerData = Array(stride(from: minSnoozeTimeSeconds, to: maxSnoozeTimeSeconds + 1, by: 1))
