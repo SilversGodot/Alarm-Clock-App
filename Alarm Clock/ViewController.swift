@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 var alarmController = ViewController()
 
@@ -52,7 +53,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     @objc func switchDidChange(_ sender: UISwitch) {
-        alarms[sender.tag].active = !alarms[sender.tag].active
+        alarmController.alarms[sender.tag].active = !alarmController.alarms[sender.tag].active
     }
     
     override func viewDidLoad() {
@@ -62,11 +63,18 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         setUpTableView()
         alarmController.currentAlarm = defaultAlarm
         alarmController.currentAlarmCache = defaultAlarm
-
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound], completionHandler: { success, error in
+            if success {
+                // schedule test
+                self.scheduleAlarms()
+            }
+            else if error != nil {
+                print("error occurred")
+            }
+        })
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        print(alarmController.alarms)
         tableView.reloadData()
     }
     
@@ -85,6 +93,28 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(AlarmTableViewCell.nib(), forCellReuseIdentifier: AlarmTableViewCell.id)
+    }
+    
+    private func scheduleAlarms() {
+        let content = UNMutableNotificationContent()
+        content.title = "Alarm!"
+        content.sound = .default
+        content.body = "Alarm content!"
+        
+        let targetDate = Date().addingTimeInterval(10)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second],
+                                                                                                    from: targetDate),
+                                                    repeats: false)
+
+        let request = UNNotificationRequest(identifier: "some_long_id", content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: { error in
+            if error != nil {
+                print("something went wrong")
+            }
+        })
+        
+        print(targetDate)
+        print(Date())
     }
 }
 
