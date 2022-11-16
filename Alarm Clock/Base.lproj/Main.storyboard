@@ -45,13 +45,13 @@
                         <barButtonItem key="leftBarButtonItem" title="Item" image="plus" catalog="system" id="MUY-7a-V0u">
                             <connections>
                                 <action selector="addAlarm:" destination="BYZ-38-t0r" id="d54-B2-pHa"/>
-                                <segue destination="J0O-T1-F2x" kind="presentation" destinationCreationSelector="addAlarm:" id="Lzb-6B-CEO"/>
+                                <segue destination="J0O-T1-F2x" kind="presentation" destinationCreationSelector="addAlarm:" modalPresentationStyle="fullScreen" id="Lzb-6B-CEO"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Edit" id="mWy-Sc-wtI">
                             <connections>
                                 <action selector="editAlarm:" destination="BYZ-38-t0r" id="BW5-St-LEM"/>
-                                <segue destination="J0O-T1-F2x" kind="presentation" destinationCreationSelector="editAlarm:" id="pbv-qg-gid"/>
+                                <segue destination="J0O-T1-F2x" kind="presentation" destinationCreationSelector="editAlarm:" modalPresentationStyle="fullScreen" id="pbv-qg-gid"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -68,7 +68,7 @@
             <objects>
                 <viewController id="J0O-T1-F2x" customClass="EditAlarmViewController" customModule="Alarm_Clock" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="RIw-yQ-guW">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yOX-K1-5Rz" userLabel="timeLabel">
@@ -214,6 +214,16 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ndw-cU-D4A">
+                                <rect key="frame" x="20" y="44" width="80" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Cancel"/>
+                                <connections>
+                                    <action selector="cancelButtonPressed:" destination="Lq9-VZ-KRs" eventType="touchUpInside" id="Vuy-n5-9oe"/>
+                                    <action selector="cancelButtonPressed:" destination="J0O-T1-F2x" eventType="touchUpInside" id="x1b-Pw-Xre"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="lBX-v0-zyS"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -237,6 +247,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bzX-bX-2cb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="Lq9-VZ-KRs" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1792.753623188406" y="101.78571428571428"/>
         </scene>
@@ -260,7 +271,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Lzb-6B-CEO"/>
+        <segue reference="pbv-qg-gid"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="plus" catalog="system" width="128" height="113"/>

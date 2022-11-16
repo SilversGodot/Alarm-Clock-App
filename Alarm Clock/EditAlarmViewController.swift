@@ -112,14 +112,18 @@ class EditAlarmViewController: UIViewController, UIPickerViewDataSource, UIPicke
         else {
             alarmController.alarms[alarmController.currentLoc] = alarm
         }
+        dismiss(animated: true, completion: nil)
     }
     
     @IBAction func deleteButtonPressed(_ sender: Any) {
         if (alarmController.currentLoc != -1) {
             alarmController.alarms.remove(at: alarmController.currentLoc)
         }
-        print(alarmController.alarms)
-        self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
+        
+        dismiss(animated: true, completion: nil)
+    }
+    @IBAction func cancelButtonPressed(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
     }
     
     private func setTimeLabelText() {

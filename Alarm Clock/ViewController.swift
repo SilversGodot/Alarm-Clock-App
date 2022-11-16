@@ -24,7 +24,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var currentLocCache: Int = 0
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return alarms.count
+        return alarmController.alarms.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -32,13 +32,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         let df = DateFormatter()
         df.locale = Locale(identifier: "en_US_POSIX")
-        df.dateFormat = "hh:mm:ss a"
+        df.dateFormat = "hh:mm a"
         df.amSymbol = "AM"
         df.pmSymbol = "PM"
-        let now = df.string(from: alarms[indexPath.row].time)
+        let now = df.string(from: alarmController.alarms[indexPath.row].time)
         
         myCell.alarmCellLabel.text = now
-        myCell.alarmCellSwitch.isOn = alarms[indexPath.row].active
+        myCell.alarmCellSwitch.isOn = alarmController.alarms[indexPath.row].active
         myCell.alarmCellSwitch.tag = indexPath.row
         myCell.alarmCellSwitch.addTarget(self, action: #selector(self.switchDidChange(_:)), for: .valueChanged)
         return myCell
@@ -53,7 +53,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     @objc func switchDidChange(_ sender: UISwitch) {
         alarms[sender.tag].active = !alarms[sender.tag].active
-        print(alarms[sender.tag])
     }
     
     override func viewDidLoad() {
@@ -63,8 +62,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         setUpTableView()
         alarmController.currentAlarm = defaultAlarm
         alarmController.currentAlarmCache = defaultAlarm
+
     }
-    override func viewWillAppear(_ animated: Bool) {
+
+    override func viewDidAppear(_ animated: Bool) {
         print(alarmController.alarms)
         tableView.reloadData()
     }
