@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7FC32354293A6E090046CD6B /* bell.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7FC32353293A6E090046CD6B /* bell.mp3 */; };
 		7FEC2EC82922F8990005939A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FEC2EC72922F8990005939A /* AppDelegate.swift */; };
 		7FEC2ECA2922F8990005939A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FEC2EC92922F8990005939A /* SceneDelegate.swift */; };
 		7FEC2ECC2922F8990005939A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FEC2ECB2922F8990005939A /* ViewController.swift */; };
@@ -40,6 +41,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7FC32353293A6E090046CD6B /* bell.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bell.mp3; sourceTree = "<group>"; };
 		7FEC2EC42922F8990005939A /* Alarm Clock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Alarm Clock.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FEC2EC72922F8990005939A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7FEC2EC92922F8990005939A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -84,6 +86,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7FC32352293A6D2B0046CD6B /* SoundFiles */ = {
+			isa = PBXGroup;
+			children = (
+				7FC32353293A6E090046CD6B /* bell.mp3 */,
+			);
+			path = SoundFiles;
+			sourceTree = "<group>";
+		};
 		7FEC2EBB2922F8990005939A = {
 			isa = PBXGroup;
 			children = (
@@ -115,6 +125,7 @@
 				7FEC2EFA2923066A0005939A /* AlarmTableViewCell.xib */,
 				7FEC2F0129235C730005939A /* EditAlarmViewController.swift */,
 				7FEC2EF72922FDDD0005939A /* AlarmModel.swift */,
+				7FC32352293A6D2B0046CD6B /* SoundFiles */,
 				7FEC2ED02922F89B0005939A /* Assets.xcassets */,
 				7FEC2ED22922F89B0005939A /* LaunchScreen.storyboard */,
 				7FEC2ED52922F89B0005939A /* Info.plist */,
@@ -244,6 +255,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7FEC2ED42922F89B0005939A /* LaunchScreen.storyboard in Resources */,
+				7FC32354293A6E090046CD6B /* bell.mp3 in Resources */,
 				7FEC2ED12922F89B0005939A /* Assets.xcassets in Resources */,
 				7FEC2ECF2922F8990005939A /* Main.storyboard in Resources */,
 				7FEC2EFC2923066A0005939A /* AlarmTableViewCell.xib in Resources */,

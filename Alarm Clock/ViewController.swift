@@ -10,12 +10,14 @@ import UserNotifications
 
 var alarmController = ViewController()
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UNUserNotificationCenterDelegate {
     
     @IBOutlet weak var tableView: UITableView!
         
-    var alarms: [Alarm] = [Alarm(time: Date().addingTimeInterval(120), active: true, repeatDays: ["Monday", "Tuesday"], soundLink: "", snoozeTimeMinutes: 5, snoozeTimeSeconds: 10, snoozeCount: 5, snoozing: false, canSnooze: true),
-                           Alarm(time: Date().addingTimeInterval(180), active: false, repeatDays: ["Monday", "Tuesday", "Wednesday"], soundLink: "", snoozeTimeMinutes: 5, snoozeTimeSeconds: 0, snoozeCount: 5, snoozing: false, canSnooze: true)]
+    var alarms: [Alarm] = [
+        Alarm(time: Date().addingTimeInterval(60), active: true, repeatDays: ["Monday", "Tuesday"], soundLink: "", snoozeTimeMinutes: 5, snoozeTimeSeconds: 10, snoozeCount: 5, snoozing: false, canSnooze: true),
+        Alarm(time: Date().addingTimeInterval(120), active: false, repeatDays: ["Monday", "Tuesday", "Wednesday"], soundLink: "", snoozeTimeMinutes: 5, snoozeTimeSeconds: 0, snoozeCount: 5, snoozing: false, canSnooze: true)
+    ]
     
     let defaultAlarm: Alarm = Alarm(time: Date(), active: true, repeatDays: [""], soundLink: "", snoozeTimeMinutes: 5, snoozeTimeSeconds: 0, snoozeCount: 5, snoozing: false, canSnooze: true)
     
@@ -72,6 +74,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound], completionHandler: { success, error in
             if success {
                 // schedule test
+                UNUserNotificationCenter.current().delegate = self
                 self.scheduleAlarms()
             }
             else if error != nil {
@@ -103,14 +106,18 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     private func scheduleAlarms() {
         for alarm in alarmController.alarms {
+            if (!alarm.active) {
+                continue;
+            }
+            
             let content = UNMutableNotificationContent()
             content.title = "Alarm!"
-            content.sound = .default
+            content.sound = .init(named: UNNotificationSoundName(rawValue: "bell.mp3"))
             content.body = timeToString(time: alarm.time)
 
             let targetDate = alarm.time
             let trigger = UNCalendarNotificationTrigger(
-                dateMatching: Calendar.current.dateComponents([.year, .month, .day, .hour, .minute],
+                dateMatching: Calendar.current.dateComponents([.hour, .minute],
                 from: targetDate),
                 repeats: false)
 
@@ -124,8 +131,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     print("something went wrong")
                 }
             })
-            print(targetDate)
         }
+    }
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void)
+    {
+        completionHandler([.banner, .badge, .sound])
     }
 }
 
