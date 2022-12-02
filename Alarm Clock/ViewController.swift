@@ -14,8 +14,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var tableView: UITableView!
         
-    var alarms: [Alarm] = [Alarm(time: Date().addingTimeInterval(60), active: true, repeatDays: ["Monday", "Tuesday"], soundLink: "", snoozeTimeMinutes: 5, snoozeTimeSeconds: 10, snoozeCount: 5, snoozing: false, canSnooze: true),
-                           Alarm(time: Date().addingTimeInterval(120), active: false, repeatDays: ["Monday", "Tuesday", "Wednesday"], soundLink: "", snoozeTimeMinutes: 5, snoozeTimeSeconds: 0, snoozeCount: 5, snoozing: false, canSnooze: true)]
+    var alarms: [Alarm] = [Alarm(time: Date().addingTimeInterval(120), active: true, repeatDays: ["Monday", "Tuesday"], soundLink: "", snoozeTimeMinutes: 5, snoozeTimeSeconds: 10, snoozeCount: 5, snoozing: false, canSnooze: true),
+                           Alarm(time: Date().addingTimeInterval(180), active: false, repeatDays: ["Monday", "Tuesday", "Wednesday"], soundLink: "", snoozeTimeMinutes: 5, snoozeTimeSeconds: 0, snoozeCount: 5, snoozing: false, canSnooze: true)]
     
     let defaultAlarm: Alarm = Alarm(time: Date(), active: true, repeatDays: [""], soundLink: "", snoozeTimeMinutes: 5, snoozeTimeSeconds: 0, snoozeCount: 5, snoozing: false, canSnooze: true)
     
@@ -25,6 +25,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var currentLoc: Int = 0
     var currentLocCache: Int = 0
     
+    func timeToString(time: Date) -> String {
+        let df = DateFormatter()
+        df.locale = Locale(identifier: "en_US_POSIX")
+        df.dateFormat = "hh:mm a"
+        df.amSymbol = "AM"
+        df.pmSymbol = "PM"
+        return df.string(from: time)
+    }
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return alarmController.alarms.count
     }
@@ -32,12 +42,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let myCell = tableView.dequeueReusableCell(withIdentifier: AlarmTableViewCell.id) as! AlarmTableViewCell
         
-        let df = DateFormatter()
-        df.locale = Locale(identifier: "en_US_POSIX")
-        df.dateFormat = "hh:mm a"
-        df.amSymbol = "AM"
-        df.pmSymbol = "PM"
-        let now = df.string(from: alarmController.alarms[indexPath.row].time)
+        let now = timeToString(time: alarmController.alarms[indexPath.row].time)
         
         myCell.alarmCellLabel.text = now
         myCell.alarmCellSwitch.isOn = alarmController.alarms[indexPath.row].active
@@ -101,14 +106,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let content = UNMutableNotificationContent()
             content.title = "Alarm!"
             content.sound = .default
-            content.body = "Alarm content!"
+            content.body = timeToString(time: alarm.time)
 
             let targetDate = alarm.time
-            let trigger = UNCalendarNotificationTrigger(dateMatching: Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second],
-                                                                                                        from: targetDate),
-                                                        repeats: false)
+            let trigger = UNCalendarNotificationTrigger(
+                dateMatching: Calendar.current.dateComponents([.year, .month, .day, .hour, .minute],
+                from: targetDate),
+                repeats: false)
 
-            let request = UNNotificationRequest(identifier: "some_long_id", content: content, trigger: trigger)
+            let request = UNNotificationRequest(
+                identifier: "alarm " + content.body,
+                content: content,
+                trigger: trigger)
+            
             UNUserNotificationCenter.current().add(request, withCompletionHandler: { error in
                 if error != nil {
                     print("something went wrong")
