@@ -163,52 +163,29 @@
                                 </connections>
                             </switch>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Snooze Time:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mlf-kv-eOY">
-                                <rect key="frame" x="20" y="372" width="140" height="162"/>
+                                <rect key="frame" x="20" y="426" width="140" height="162"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1n1-RO-M8i">
-                                <rect key="frame" x="140" y="372" width="120" height="162"/>
+                                <rect key="frame" x="140" y="426" width="120" height="162"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             </pickerView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Snooze Count Limit:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lhg-OE-q53">
-                                <rect key="frame" x="20" y="542" width="180" height="162"/>
+                                <rect key="frame" x="20" y="596" width="180" height="162"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UQ0-FW-xGy">
-                                <rect key="frame" x="180" y="542" width="214" height="162"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            </pickerView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WGi-SW-36h">
-                                <rect key="frame" x="162" y="712" width="76" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Save"/>
-                                <connections>
-                                    <action selector="saveButtonPressed:" destination="J0O-T1-F2x" eventType="touchUpInside" id="s73-6n-xRL"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qvl-Xj-t6m">
-                                <rect key="frame" x="155" y="751" width="91" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="tintColor" systemColor="systemRedColor"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Delete"/>
-                                <connections>
-                                    <action selector="deleteButtonPressed:" destination="J0O-T1-F2x" eventType="touchUpInside" id="gEF-om-9Lr"/>
-                                </connections>
-                            </button>
-                            <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WAV-XO-cwq">
-                                <rect key="frame" x="260" y="372" width="125" height="162"/>
+                                <rect key="frame" x="180" y="596" width="214" height="162"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             </pickerView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text=":" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dyt-eJ-1Cv">
-                                <rect key="frame" x="248" y="442" width="5" height="21"/>
+                                <rect key="frame" x="248" y="496" width="5" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -222,6 +199,45 @@
                                 <connections>
                                     <action selector="cancelButtonPressed:" destination="Lq9-VZ-KRs" eventType="touchUpInside" id="Vuy-n5-9oe"/>
                                     <action selector="cancelButtonPressed:" destination="J0O-T1-F2x" eventType="touchUpInside" id="x1b-Pw-Xre"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Sound Link: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kL4-Ws-BG1">
+                                <rect key="frame" x="20" y="372" width="110" height="59"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cld-t5-e8P">
+                                <rect key="frame" x="138" y="384" width="256" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="updateSoundLinkValue:" destination="J0O-T1-F2x" eventType="editingChanged" id="VDU-vt-9gp"/>
+                                </connections>
+                            </textField>
+                            <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WAV-XO-cwq">
+                                <rect key="frame" x="269" y="426" width="125" height="162"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            </pickerView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WGi-SW-36h">
+                                <rect key="frame" x="162" y="766" width="76" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Save"/>
+                                <connections>
+                                    <action selector="saveButtonPressed:" destination="J0O-T1-F2x" eventType="touchUpInside" id="s73-6n-xRL"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qvl-Xj-t6m">
+                                <rect key="frame" x="155" y="805" width="91" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" systemColor="systemRedColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Delete"/>
+                                <connections>
+                                    <action selector="deleteButtonPressed:" destination="J0O-T1-F2x" eventType="touchUpInside" id="gEF-om-9Lr"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -239,6 +255,7 @@
                         <outlet property="snoozeCountPicker" destination="UQ0-FW-xGy" id="XEe-kS-Lor"/>
                         <outlet property="snoozeTimeMinutesPicker" destination="1n1-RO-M8i" id="gSm-Bs-Ddt"/>
                         <outlet property="snoozeTimeSecondsPicker" destination="WAV-XO-cwq" id="5u9-mW-Odu"/>
+                        <outlet property="soundLink" destination="cld-t5-e8P" id="7QE-mA-nRo"/>
                         <outlet property="sundayButton" destination="NAU-LB-4O1" id="wIR-SE-odZ"/>
                         <outlet property="thursdayButton" destination="CJ3-wv-iwN" id="GSg-NI-Ueh"/>
                         <outlet property="timeLabel" destination="yOX-K1-5Rz" id="xxI-3s-Jra"/>

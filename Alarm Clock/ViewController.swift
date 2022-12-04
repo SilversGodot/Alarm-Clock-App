@@ -13,13 +13,12 @@ var alarmController = ViewController()
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UNUserNotificationCenterDelegate {
     
     @IBOutlet weak var tableView: UITableView!
-        
     var alarms: [Alarm] = [
-        Alarm(time: Date().addingTimeInterval(60), active: true, repeatDays: ["Monday", "Tuesday"], soundLink: "", snoozeTimeMinutes: 5, snoozeTimeSeconds: 10, snoozeCount: 5, snoozing: false, canSnooze: true),
-        Alarm(time: Date().addingTimeInterval(120), active: false, repeatDays: ["Monday", "Tuesday", "Wednesday"], soundLink: "", snoozeTimeMinutes: 5, snoozeTimeSeconds: 0, snoozeCount: 5, snoozing: false, canSnooze: true)
+//        Alarm(id: UUID(), time: Date().addingTimeInterval(60), active: true, repeatDays: [""], soundURL: "https://cvws.icloud-content.com/B/AYVCoYKEGEn3OiB1CjFh10JGD99WAaXqXaKa5FPKT5GXQSlHhrHu9dR6/bell.wav?o=ApFqI4YGqu_FcyXF1d30KSJ79-2IRFXvwx1AxVseeZtf&v=1&x=3&a=CAog2BZzzcQxhFBL38sjXXZaOOG4H_CDsoCXnvmM9fNr3z4SbxD7va74zTAY-5qK-s0wIgEAUgRGD99WWgTu9dR6aieazvtF4bNgs2B7MGaZI-vPf1oqT-FTyaPfHI3SZjIc8v7nVwQLdaJyJ97uqiTOZy1Qp0E4bxNB7_k5UVQ8L33Qj17M6xIlY6x3MhkWZvZwhg&e=1670192991&fl=&r=b0c18db6-1a9a-4ae2-b982-08710d2cdb6d-1&k=618lgBWWbBBLbooUcwYMmA&ckc=com.apple.clouddocs&ckz=com.apple.CloudDocs&p=116&s=hGpsEZfFRHFTpINuBeLBq1zlCxw&cd=i", fileDownloaded: false, canSnooze: true, snoozing: false, snoozeTimeMinutes: 5, snoozeTimeSeconds: 0, snoozeCountMax: 5, snoozeCountCurrent: 0)
+//        Alarm(time: Date().addingTimeInterval(120), active: false, repeatDays: ["Monday", "Tuesday", "Wednesday"], soundURL: "", soundPath: "", fileDownloaded: false, snoozeTimeMinutes: 5, snoozeTimeSeconds: 0, snoozeCountMax: 5, snoozeCountCurrent: 0, snoozing: false, canSnooze: true)
     ]
     
-    let defaultAlarm: Alarm = Alarm(time: Date(), active: true, repeatDays: [""], soundLink: "", snoozeTimeMinutes: 5, snoozeTimeSeconds: 0, snoozeCount: 5, snoozing: false, canSnooze: true)
+    let defaultAlarm: Alarm = Alarm(id: UUID(), time: Date(), active: true, repeatDays: [""], soundURL: "", fileDownloaded: false, canSnooze: true, snoozing: false, snoozeTimeMinutes: 5, snoozeTimeSeconds: 0, snoozeCountMax: 5, snoozeCountCurrent: 0)
     
     var currentAlarm: Alarm?
     var currentAlarmCache: Alarm?
@@ -68,6 +67,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         title = "Alarm Clocks"
+        
         setUpTableView()
         alarmController.currentAlarm = defaultAlarm
         alarmController.currentAlarmCache = defaultAlarm
@@ -106,36 +106,97 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     private func scheduleAlarms() {
         for alarm in alarmController.alarms {
-            if (!alarm.active) {
-                continue;
-            }
-            
-            let content = UNMutableNotificationContent()
-            content.title = "Alarm!"
-            content.sound = .init(named: UNNotificationSoundName(rawValue: "bell.mp3"))
-            content.body = timeToString(time: alarm.time)
-
-            let targetDate = alarm.time
-            let trigger = UNCalendarNotificationTrigger(
-                dateMatching: Calendar.current.dateComponents([.hour, .minute],
-                from: targetDate),
-                repeats: false)
-
-            let request = UNNotificationRequest(
-                identifier: "alarm " + content.body,
-                content: content,
-                trigger: trigger)
-            
-            UNUserNotificationCenter.current().add(request, withCompletionHandler: { error in
-                if error != nil {
-                    print("something went wrong")
-                }
-            })
+            scheduleAlarm(alarm: alarm)
         }
     }
+    
+    // schedules an individual alarm
+    func scheduleAlarm(alarm: Alarm) {
+        if (!alarm.active) {
+            return;
+        }
+        
+        if (alarm.soundURL != "") {
+            do {
+                let targetURL = try FileManager.default.soundsLibraryURL(for: alarm.id.uuidString)
+                if !FileManager.default.fileExists(atPath: targetURL.absoluteString) {
+                    let url = URL(string: alarm.soundURL)
+                    
+                    let downloadTask = URLSession.shared.downloadTask(with: url!) {
+                        urlOrNil, responseOrNil, errorOrNil in
+                        // check for and handle errors:
+                        // * errorOrNil should be nil
+                        // * responseOrNil should be an HTTPURLResponse with statusCode in 200..<299
+                        
+                        guard let fileURL = urlOrNil else { return }
+                        do {
+                            let targetURL = try FileManager.default.soundsLibraryURL(for: alarm.id.uuidString)
+                            try FileManager.default.moveItem(at: fileURL, to: targetURL)
+                            print(fileURL)
+                            print(targetURL)
+                        } catch {
+                            print ("file error: \(error)")
+                        }
+                    }
+                    downloadTask.resume()
+                }
+
+            } catch {
+                print ("file error: \(error)")
+            }
+
+        }
+        
+        // specifies notification content
+        let content = UNMutableNotificationContent()
+        content.title = "Alarm!"
+        // sound file must be in Library/Sounds
+        content.sound = UNNotificationSound(named: UNNotificationSoundName(alarm.id.uuidString))
+        content.body = timeToString(time: alarm.time)
+        
+        let targetDate = alarm.time
+        let trigger = UNCalendarNotificationTrigger(
+            dateMatching: Calendar.current.dateComponents([.hour, .minute],
+            from: targetDate),
+            repeats: false)
+
+        let request = UNNotificationRequest(
+            identifier: alarm.id.uuidString,
+            content: content,
+            trigger: trigger)
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: { error in
+            if error != nil {
+                print("something went wrong")
+            }
+        })
+    }
+    
+    func downloadSoundFile() {
+        
+    }
+    
+    // unschedules an individual alarm
+    func unscheduleAlarm(s: String) {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [s])
+    }
+    
+    // allows notifications while the app is open
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void)
     {
         completionHandler([.banner, .badge, .sound])
     }
+    
+    
 }
 
+// finds the file path to Library/Sounds
+extension FileManager {
+    func soundsLibraryURL(for filename: String) throws -> URL {
+        let libraryURL = try url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        let soundFolderURL = libraryURL.appendingPathComponent("Sounds", isDirectory: true)
+        if !fileExists(atPath: soundFolderURL.path) {
+            try createDirectory(at: soundFolderURL, withIntermediateDirectories: true)
+        }
+        return soundFolderURL.appendingPathComponent(filename, isDirectory: false)
+    }
+}

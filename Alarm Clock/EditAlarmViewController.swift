@@ -44,7 +44,7 @@ class EditAlarmViewController: UIViewController, UIPickerViewDataSource, UIPicke
             alarm.snoozeTimeSeconds = row
         }
         else {
-            alarm.snoozeCount = row
+            alarm.snoozeCountMax = row
         }
     }
     
@@ -80,6 +80,7 @@ class EditAlarmViewController: UIViewController, UIPickerViewDataSource, UIPicke
     @IBOutlet weak var snoozeTimeSecondsPicker: UIPickerView!
     @IBOutlet weak var snoozeCountPicker: UIPickerView!
     
+    @IBOutlet weak var soundLink: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,6 +89,7 @@ class EditAlarmViewController: UIViewController, UIPickerViewDataSource, UIPicke
         alarm = alarmController.currentAlarm
         
         alarmTimePicker.date = alarm.time
+        soundLink.text = alarm.soundURL
         
         snoozeCountPickerData = Array(stride(from: minSnoozeCount, to: maxSnoozeCount + 1, by: 1))
         snoozeTimeMinutesPickerData = Array(stride(from: minSnoozeTimeMinutes, to: maxSnoozeTimeMinutes + 1, by: 1))
@@ -103,6 +105,10 @@ class EditAlarmViewController: UIViewController, UIPickerViewDataSource, UIPicke
         alarm.active = !alarm.active
     }
     
+    @IBAction func snoozeSwitched(_ sender: Any) {
+        alarm.canSnooze = !alarm.canSnooze
+    }
+    
     @IBAction func timeChange(_ sender: Any) {
         alarm.time = alarmTimePicker.date
         setTimeLabelText()
@@ -114,13 +120,16 @@ class EditAlarmViewController: UIViewController, UIPickerViewDataSource, UIPicke
         }
         else {
             alarmController.alarms[alarmController.currentLoc] = alarm
+            alarmController.unscheduleAlarm(s: alarm.id.uuidString)
         }
+        alarmController.scheduleAlarm(alarm: alarm)
         dismiss(animated: true, completion: nil)
     }
     
     @IBAction func deleteButtonPressed(_ sender: Any) {
         if (alarmController.currentLoc != -1) {
             alarmController.alarms.remove(at: alarmController.currentLoc)
+            alarmController.unscheduleAlarm(s: alarm.id.uuidString)
         }
         
         dismiss(animated: true, completion: nil)
@@ -139,10 +148,14 @@ class EditAlarmViewController: UIViewController, UIPickerViewDataSource, UIPicke
         timeLabel.text = time
     }
     
+    @IBAction func updateSoundLinkValue(_ sender: Any) {
+        alarm.soundURL = soundLink.text!
+    }
+    
     private func setUpSnoozePickers() {
         snoozeCountPicker.dataSource = self
         snoozeCountPicker.delegate = self
-        snoozeCountPicker.selectRow(alarm.snoozeCount, inComponent: 0, animated: true)
+        snoozeCountPicker.selectRow(alarm.snoozeCountMax, inComponent: 0, animated: true)
         
         snoozeTimeMinutesPicker.dataSource = self
         snoozeTimeMinutesPicker.delegate = self

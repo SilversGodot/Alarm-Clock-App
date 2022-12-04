@@ -8,13 +8,19 @@
 import UIKit
 
 struct Alarm {
+    var id: UUID
+    
     var time: Date
     var active: Bool
     var repeatDays: Set<String>
-    var soundLink: String
+    
+    var soundURL: String
+    var fileDownloaded: Bool
+    
+    var canSnooze: Bool
+    var snoozing: Bool
     var snoozeTimeMinutes: Int
     var snoozeTimeSeconds: Int
-    var snoozeCount: Int
-    var snoozing: Bool
-    var canSnooze: Bool
+    var snoozeCountMax: Int
+    var snoozeCountCurrent: Int
 }
