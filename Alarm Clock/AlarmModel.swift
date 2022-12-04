@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct Alarm {
+struct Alarm: Encodable, Decodable {
     var id: UUID
     
     var time: Date

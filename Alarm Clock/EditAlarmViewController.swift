@@ -76,6 +76,8 @@ class EditAlarmViewController: UIViewController, UIPickerViewDataSource, UIPicke
     @IBOutlet weak var deleteButton: UIButton!
     
     @IBOutlet weak var alarmTimePicker: UIDatePicker!
+    
+    @IBOutlet weak var snoozeSwitch: UISwitch!
     @IBOutlet weak var snoozeTimeMinutesPicker: UIPickerView!
     @IBOutlet weak var snoozeTimeSecondsPicker: UIPickerView!
     @IBOutlet weak var snoozeCountPicker: UIPickerView!
@@ -99,14 +101,15 @@ class EditAlarmViewController: UIViewController, UIPickerViewDataSource, UIPicke
         setUpButtons()
         updateButtonColors()
         setUpSnoozePickers()
+        setUpSwitches();
     }
     
     @IBAction func alarmSwitched(_ sender: Any) {
-        alarm.active = !alarm.active
+        alarm.active = alarmSwitch.isOn
     }
     
     @IBAction func snoozeSwitched(_ sender: Any) {
-        alarm.canSnooze = !alarm.canSnooze
+        alarm.canSnooze = snoozeSwitch.isOn
     }
     
     @IBAction func timeChange(_ sender: Any) {
@@ -123,6 +126,7 @@ class EditAlarmViewController: UIViewController, UIPickerViewDataSource, UIPicke
             alarmController.unscheduleAlarm(s: alarm.id.uuidString)
         }
         alarmController.scheduleAlarm(alarm: alarm)
+        alarmController.saveAlarms()
         dismiss(animated: true, completion: nil)
     }
     
@@ -130,6 +134,7 @@ class EditAlarmViewController: UIViewController, UIPickerViewDataSource, UIPicke
         if (alarmController.currentLoc != -1) {
             alarmController.alarms.remove(at: alarmController.currentLoc)
             alarmController.unscheduleAlarm(s: alarm.id.uuidString)
+            alarmController.saveAlarms()
         }
         
         dismiss(animated: true, completion: nil)
@@ -234,6 +239,11 @@ class EditAlarmViewController: UIViewController, UIPickerViewDataSource, UIPicke
             alarm.repeatDays.insert("Saturday")
         }
         updateButtonColors()
+    }
+    
+    private func setUpSwitches() {
+        alarmSwitch.setOn(alarm.active, animated: true)
+        snoozeSwitch.setOn(alarm.canSnooze, animated: false)
     }
     
     private func updateButtonColors() {

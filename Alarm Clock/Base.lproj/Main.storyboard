@@ -174,14 +174,14 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             </pickerView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Snooze Count Limit:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lhg-OE-q53">
-                                <rect key="frame" x="20" y="596" width="180" height="162"/>
+                                <rect key="frame" x="20" y="596" width="160" height="162"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UQ0-FW-xGy">
-                                <rect key="frame" x="180" y="596" width="214" height="162"/>
+                                <rect key="frame" x="180" y="596" width="157" height="162"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             </pickerView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text=":" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dyt-eJ-1Cv">
@@ -221,6 +221,13 @@
                                 <rect key="frame" x="269" y="426" width="125" height="162"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             </pickerView>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W0A-Vb-1CE">
+                                <rect key="frame" x="345" y="664" width="49" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="snoozeSwitched:" destination="J0O-T1-F2x" eventType="valueChanged" id="2ex-ss-FIe"/>
+                                </connections>
+                            </switch>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WGi-SW-36h">
                                 <rect key="frame" x="162" y="766" width="76" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -253,6 +260,7 @@
                         <outlet property="saturdayButton" destination="cRM-OU-uEO" id="z8d-mi-8Qa"/>
                         <outlet property="saveButton" destination="WGi-SW-36h" id="R9M-it-nsk"/>
                         <outlet property="snoozeCountPicker" destination="UQ0-FW-xGy" id="XEe-kS-Lor"/>
+                        <outlet property="snoozeSwitch" destination="W0A-Vb-1CE" id="XGi-fB-3DW"/>
                         <outlet property="snoozeTimeMinutesPicker" destination="1n1-RO-M8i" id="gSm-Bs-Ddt"/>
                         <outlet property="snoozeTimeSecondsPicker" destination="WAV-XO-cwq" id="5u9-mW-Odu"/>
                         <outlet property="soundLink" destination="cld-t5-e8P" id="7QE-mA-nRo"/>

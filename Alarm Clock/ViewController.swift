@@ -18,7 +18,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 //        Alarm(time: Date().addingTimeInterval(120), active: false, repeatDays: ["Monday", "Tuesday", "Wednesday"], soundURL: "", soundPath: "", fileDownloaded: false, snoozeTimeMinutes: 5, snoozeTimeSeconds: 0, snoozeCountMax: 5, snoozeCountCurrent: 0, snoozing: false, canSnooze: true)
     ]
     
-    let defaultAlarm: Alarm = Alarm(id: UUID(), time: Date(), active: true, repeatDays: [""], soundURL: "", fileDownloaded: false, canSnooze: true, snoozing: false, snoozeTimeMinutes: 5, snoozeTimeSeconds: 0, snoozeCountMax: 5, snoozeCountCurrent: 0)
+    var defaultAlarm: Alarm = Alarm(id: UUID(), time: Date(), active: true, repeatDays: [""], soundURL: "", fileDownloaded: false, canSnooze: true, snoozing: false, snoozeTimeMinutes: 5, snoozeTimeSeconds: 0, snoozeCountMax: 5, snoozeCountCurrent: 0)
     
     var currentAlarm: Alarm?
     var currentAlarmCache: Alarm?
@@ -68,6 +68,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // Do any additional setup after loading the view.
         title = "Alarm Clocks"
         
+        fetchAlarms()
         setUpTableView()
         alarmController.currentAlarm = defaultAlarm
         alarmController.currentAlarmCache = defaultAlarm
@@ -88,6 +89,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     @IBSegueAction func addAlarm(_ coder: NSCoder) -> EditAlarmViewController? {
+        defaultAlarm.id = UUID()
         alarmController.currentAlarm = defaultAlarm
         alarmController.currentLoc = -1
         return EditAlarmViewController(coder: coder)
@@ -107,6 +109,31 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     private func scheduleAlarms() {
         for alarm in alarmController.alarms {
             scheduleAlarm(alarm: alarm)
+        }
+    }
+    
+    func fetchAlarms() {
+        let loadURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("data")
+            .appendingPathExtension("plist")
+        do {
+            let plistData = try Data(contentsOf: loadURL)
+            let alarmLoad = try PropertyListDecoder().decode(Array<Alarm>.self, from: plistData)
+            alarmController.alarms = alarmLoad
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func saveAlarms() {
+        let saveURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("data")
+            .appendingPathExtension("plist")
+        do {
+            let encodedData = try PropertyListEncoder().encode(alarms)
+            try encodedData.write(to: saveURL)
+        } catch {
+            print(error.localizedDescription)
         }
     }
     
