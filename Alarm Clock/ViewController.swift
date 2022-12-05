@@ -180,10 +180,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func rescheduleAlarm(alarm: Alarm) {
+        let offset = alarmController.alarms.firstIndex(where: {$0.id.uuidString == alarm.id.uuidString})
+        
         if (alarm.repeatDays.isEmpty) {
-            if let offset = alarmController.alarms.firstIndex(where: {$0.id.uuidString == alarm.id.uuidString}) {
-                alarmController.alarms[offset].active = false
-            }
+            alarmController.alarms[offset!].active = false
             return
         }
         
@@ -210,7 +210,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         var newAlarm = alarm
         newAlarm.time = alarm.time.advanced(by: TimeInterval(dayDiff * 60 * 60 * 24))
+        newAlarm.snoozeCountCurrent = 0
 
+        alarmController.alarms[offset!] = newAlarm
+        
         scheduleAlarm(alarm: newAlarm)
     }
     
@@ -225,7 +228,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         var newAlarm = alarm
         newAlarm.snoozeCountCurrent += 1
-        newAlarm.time = alarm.time.advanced(by: TimeInterval(alarm.snoozeTimeMinutes * 60 + alarm.snoozeTimeSeconds))
+        newAlarm.time = alarm.time.advanced(by: TimeInterval(alarm.snoozeCountCurrent * (alarm.snoozeTimeMinutes * 60 + alarm.snoozeTimeSeconds)))
         
         scheduleAlarm(alarm: newAlarm)
     }
