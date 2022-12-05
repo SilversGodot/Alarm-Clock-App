@@ -177,11 +177,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func scheduleAlarmSnooze(alarm: Alarm) {
-        if (alarm.repeatDays.isEmpty) {
+        if (!alarm.active) {
+            return;
+        }
+        
+        if (!alarm.canSnooze || alarm.snoozeCountCurrent >= alarm.snoozeCountMax) {
             return
         }
         
         var newAlarm = alarm
+        newAlarm.snoozeCountCurrent += 1
         newAlarm.time = alarm.time.advanced(by: TimeInterval(alarm.snoozeTimeMinutes * 60 + alarm.snoozeTimeSeconds))
         
         scheduleAlarm(alarm: newAlarm)
@@ -189,6 +194,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func scheduleAlarmEarlyDismiss(alarm: Alarm) {
         unscheduleAlarm(s: alarm.id.uuidString)
+        
+        if (!alarm.active) {
+            return;
+        }
         
         // one-time alarm does not need to be rescheduled
         if (alarm.repeatDays.isEmpty) {

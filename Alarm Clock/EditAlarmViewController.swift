@@ -89,9 +89,7 @@ class EditAlarmViewController: UIViewController, UIPickerViewDataSource, UIPicke
         
         view.backgroundColor = UIColor.white
         alarm = alarmController.currentAlarm
-        
-        print(alarm)
-        
+                
         alarmTimePicker.date = alarm.time
         soundLink.text = alarm.soundURL
         
