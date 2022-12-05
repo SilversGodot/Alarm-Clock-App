@@ -12,7 +12,7 @@ struct Alarm: Encodable, Decodable {
     
     var time: Date
     var active: Bool
-    var repeatDays: Set<String>
+    var repeatDays: Set<Int>
     
     var soundURL: String
     var fileDownloaded: Bool

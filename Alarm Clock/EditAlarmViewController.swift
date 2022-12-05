@@ -90,6 +90,8 @@ class EditAlarmViewController: UIViewController, UIPickerViewDataSource, UIPicke
         view.backgroundColor = UIColor.white
         alarm = alarmController.currentAlarm
         
+        print(alarm)
+        
         alarmTimePicker.date = alarm.time
         soundLink.text = alarm.soundURL
         
@@ -98,6 +100,7 @@ class EditAlarmViewController: UIViewController, UIPickerViewDataSource, UIPicke
         snoozeTimeSecondsPickerData = Array(stride(from: minSnoozeTimeSeconds, to: maxSnoozeTimeSeconds + 1, by: 1))
         
         setTimeLabelText()
+        setUpSoundLink()
         setUpButtons()
         updateButtonColors()
         setUpSnoozePickers()
@@ -125,6 +128,7 @@ class EditAlarmViewController: UIViewController, UIPickerViewDataSource, UIPicke
             alarmController.alarms[alarmController.currentLoc] = alarm
             alarmController.unscheduleAlarm(s: alarm.id.uuidString)
         }
+        alarmController.unscheduleAlarm(s: alarm.id.uuidString)
         alarmController.scheduleAlarm(alarm: alarm)
         alarmController.saveAlarms()
         dismiss(animated: true, completion: nil)
@@ -153,6 +157,10 @@ class EditAlarmViewController: UIViewController, UIPickerViewDataSource, UIPicke
         timeLabel.text = time
     }
     
+    private func setUpSoundLink() {
+        soundLink.text = alarm.soundURL
+    }
+    
     @IBAction func updateSoundLinkValue(_ sender: Any) {
         alarm.soundURL = soundLink.text!
     }
@@ -172,71 +180,71 @@ class EditAlarmViewController: UIViewController, UIPickerViewDataSource, UIPicke
     }
     
     @IBAction func sundayButtonPressed(_ sender: Any) {
-        if alarm.repeatDays.contains("Sunday") {
-            alarm.repeatDays.remove("Sunday")
+        if alarm.repeatDays.contains(1) {
+            alarm.repeatDays.remove(1)
         }
         else {
-            alarm.repeatDays.insert("Sunday")
+            alarm.repeatDays.insert(1)
         }
         updateButtonColors()
     }
     
     @IBAction func mondayButtonPressed(_ sender: Any) {
-        if alarm.repeatDays.contains("Monday") {
-            alarm.repeatDays.remove("Monday")
+        if alarm.repeatDays.contains(2) {
+            alarm.repeatDays.remove(2)
         }
         else {
-            alarm.repeatDays.insert("Monday")
+            alarm.repeatDays.insert(2)
         }
         updateButtonColors()
     }
     
     @IBAction func tuesdayButtonPressed(_ sender: Any) {
-        if alarm.repeatDays.contains("Tuesday") {
-            alarm.repeatDays.remove("Tuesday")
+        if alarm.repeatDays.contains(3) {
+            alarm.repeatDays.remove(3)
         }
         else {
-            alarm.repeatDays.insert("Tuesday")
+            alarm.repeatDays.insert(3)
         }
         updateButtonColors()
     }
     
     @IBAction func wednesdayButtonPressed(_ sender: Any) {
-        if alarm.repeatDays.contains("Wednesday") {
-            alarm.repeatDays.remove("Wednesday")
+        if alarm.repeatDays.contains(4) {
+            alarm.repeatDays.remove(4)
         }
         else {
-            alarm.repeatDays.insert("Wednesday")
+            alarm.repeatDays.insert(4)
         }
         updateButtonColors()
     }
     
     @IBAction func thursdayButtonPressed(_ sender: Any) {
-        if alarm.repeatDays.contains("Thursday") {
-            alarm.repeatDays.remove("Thursday")
+        if alarm.repeatDays.contains(5) {
+            alarm.repeatDays.remove(5)
         }
         else {
-            alarm.repeatDays.insert("Thursday")
+            alarm.repeatDays.insert(5)
         }
         updateButtonColors()
     }
     
     @IBAction func fridayButtonPressed(_ sender: Any) {
-        if alarm.repeatDays.contains("Friday") {
-            alarm.repeatDays.remove("Friday")
+        if alarm.repeatDays.contains(6) {
+            alarm.repeatDays.remove(6)
         }
         else {
-            alarm.repeatDays.insert("Friday")
+            alarm.repeatDays.insert(6)
         }
         updateButtonColors()
     }
     
     @IBAction func saturdayButtonPressed(_ sender: Any) {
-        if alarm.repeatDays.contains("Saturday") {
-            alarm.repeatDays.remove("Saturday")
+        if alarm.repeatDays.contains(7) {
+            alarm.repeatDays.remove(7)
         }
         else {
-            alarm.repeatDays.insert("Saturday")
+            alarm.repeatDays.insert(7)
         }
         updateButtonColors()
     }
@@ -247,49 +255,49 @@ class EditAlarmViewController: UIViewController, UIPickerViewDataSource, UIPicke
     }
     
     private func updateButtonColors() {
-        if alarm.repeatDays.contains("Sunday") {
+        if alarm.repeatDays.contains(1) {
             sundayButton.backgroundColor = activeButtonColor
         }
         else {
             sundayButton.backgroundColor = inactiveButtonColor
         }
         
-        if alarm.repeatDays.contains("Monday") {
+        if alarm.repeatDays.contains(2) {
             mondayButton.backgroundColor = activeButtonColor
         }
         else {
             mondayButton.backgroundColor = inactiveButtonColor
         }
         
-        if alarm.repeatDays.contains("Tuesday") {
+        if alarm.repeatDays.contains(3) {
             tuesdayButton.backgroundColor = activeButtonColor
         }
         else {
             tuesdayButton.backgroundColor = inactiveButtonColor
         }
         
-        if alarm.repeatDays.contains("Wednesday") {
+        if alarm.repeatDays.contains(4) {
             wednesdayButton.backgroundColor = activeButtonColor
         }
         else {
             wednesdayButton.backgroundColor = inactiveButtonColor
         }
         
-        if alarm.repeatDays.contains("Thursday") {
+        if alarm.repeatDays.contains(5) {
             thursdayButton.backgroundColor = activeButtonColor
         }
         else {
             thursdayButton.backgroundColor = inactiveButtonColor
         }
         
-        if alarm.repeatDays.contains("Friday") {
+        if alarm.repeatDays.contains(6) {
             fridayButton.backgroundColor = activeButtonColor
         }
         else {
             fridayButton.backgroundColor = inactiveButtonColor
         }
         
-        if alarm.repeatDays.contains("Saturday") {
+        if alarm.repeatDays.contains(7) {
             saturdayButton.backgroundColor = activeButtonColor
         }
         else {

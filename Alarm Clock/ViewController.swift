@@ -18,7 +18,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 //        Alarm(time: Date().addingTimeInterval(120), active: false, repeatDays: ["Monday", "Tuesday", "Wednesday"], soundURL: "", soundPath: "", fileDownloaded: false, snoozeTimeMinutes: 5, snoozeTimeSeconds: 0, snoozeCountMax: 5, snoozeCountCurrent: 0, snoozing: false, canSnooze: true)
     ]
     
-    var defaultAlarm: Alarm = Alarm(id: UUID(), time: Date(), active: true, repeatDays: [""], soundURL: "", fileDownloaded: false, canSnooze: true, snoozing: false, snoozeTimeMinutes: 5, snoozeTimeSeconds: 0, snoozeCountMax: 5, snoozeCountCurrent: 0)
+    var defaultAlarm: Alarm = Alarm(id: UUID(), time: Date(), active: true, repeatDays: [], soundURL: "", fileDownloaded: false, canSnooze: true, snoozing: false, snoozeTimeMinutes: 5, snoozeTimeSeconds: 0, snoozeCountMax: 5, snoozeCountCurrent: 0)
     
     var currentAlarm: Alarm?
     var currentAlarmCache: Alarm?
@@ -45,6 +45,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         let now = timeToString(time: alarmController.alarms[indexPath.row].time)
         
+        myCell.alarm = alarmController.alarms[indexPath.row]
         myCell.alarmCellLabel.text = now
         myCell.alarmCellSwitch.isOn = alarmController.alarms[indexPath.row].active
         myCell.alarmCellSwitch.tag = indexPath.row
@@ -58,9 +59,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         alarmController.currentLoc = indexPath.row
         alarmController.currentLocCache = indexPath.row
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100
+    }
 
     @objc func switchDidChange(_ sender: UISwitch) {
-        alarmController.alarms[sender.tag].active = !alarmController.alarms[sender.tag].active
+        alarmController.alarms[sender.tag].active = sender.isOn
     }
     
     override func viewDidLoad() {
@@ -144,34 +149,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         
         if (alarm.soundURL != "") {
-            do {
-                let targetURL = try FileManager.default.soundsLibraryURL(for: alarm.id.uuidString)
-                if !FileManager.default.fileExists(atPath: targetURL.absoluteString) {
-                    let url = URL(string: alarm.soundURL)
-                    
-                    let downloadTask = URLSession.shared.downloadTask(with: url!) {
-                        urlOrNil, responseOrNil, errorOrNil in
-                        // check for and handle errors:
-                        // * errorOrNil should be nil
-                        // * responseOrNil should be an HTTPURLResponse with statusCode in 200..<299
-                        
-                        guard let fileURL = urlOrNil else { return }
-                        do {
-                            let targetURL = try FileManager.default.soundsLibraryURL(for: alarm.id.uuidString)
-                            try FileManager.default.moveItem(at: fileURL, to: targetURL)
-                            print(fileURL)
-                            print(targetURL)
-                        } catch {
-                            print ("file error: \(error)")
-                        }
-                    }
-                    downloadTask.resume()
-                }
-
-            } catch {
-                print ("file error: \(error)")
-            }
-
+            downloadSoundFile(alarm: alarm)
         }
         
         // specifies notification content
@@ -183,7 +161,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         let targetDate = alarm.time
         let trigger = UNCalendarNotificationTrigger(
-            dateMatching: Calendar.current.dateComponents([.hour, .minute],
+            dateMatching: Calendar.current.dateComponents([.year, .month, .day, .hour, .minute],
             from: targetDate),
             repeats: false)
 
@@ -198,13 +176,83 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         })
     }
     
-    func downloadSoundFile() {
+    func scheduleAlarmSnooze(alarm: Alarm) {
+        if (alarm.repeatDays.isEmpty) {
+            return
+        }
         
+        var newAlarm = alarm
+        newAlarm.time = alarm.time.advanced(by: TimeInterval(alarm.snoozeTimeMinutes * 60 + alarm.snoozeTimeSeconds))
+        
+        scheduleAlarm(alarm: newAlarm)
+    }
+    
+    func scheduleAlarmEarlyDismiss(alarm: Alarm) {
+        unscheduleAlarm(s: alarm.id.uuidString)
+        
+        // one-time alarm does not need to be rescheduled
+        if (alarm.repeatDays.isEmpty) {
+            return
+        }
+
+        let currentDay = alarm.time.dayNumberOfWeek()!
+        var i: Int = 0
+        
+        let sortedRepeatedDays = alarm.repeatDays.sorted()
+        
+        for day in sortedRepeatedDays {
+            if day > currentDay {
+                break;
+            }
+            i += 1
+        }
+        
+        i = i % alarm.repeatDays.count
+        
+        let prevDay = currentDay
+        let newDay = sortedRepeatedDays[i]
+        var dayDiff = newDay - prevDay
+        if dayDiff <= 0 {
+            dayDiff += 7
+        }
+        
+        var newAlarm = alarm
+        newAlarm.time = alarm.time.advanced(by: TimeInterval(dayDiff * 60 * 60 * 24))
+
+        scheduleAlarm(alarm: newAlarm)
     }
     
     // unschedules an individual alarm
     func unscheduleAlarm(s: String) {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [s])
+    }
+    
+    func downloadSoundFile(alarm: Alarm) {
+        do {
+            let targetURL = try FileManager.default.soundsLibraryURL(for: alarm.id.uuidString)
+            if !FileManager.default.fileExists(atPath: targetURL.absoluteString) {
+                let url = URL(string: alarm.soundURL)
+                
+                let downloadTask = URLSession.shared.downloadTask(with: url!) {
+                    urlOrNil, responseOrNil, errorOrNil in
+                    // check for and handle errors:
+                    // * errorOrNil should be nil
+                    // * responseOrNil should be an HTTPURLResponse with statusCode in 200..<299
+                    
+                    guard let fileURL = urlOrNil else { return }
+                    do {
+                        let targetURL = try FileManager.default.soundsLibraryURL(for: alarm.id.uuidString)
+                        try FileManager.default.moveItem(at: fileURL, to: targetURL)
+                    } catch {
+                        print ("file error: \(error)")
+                    }
+                }
+                downloadTask.resume()
+            }
+
+        } catch {
+            print ("file error: \(error)")
+        }
     }
     
     // allows notifications while the app is open
@@ -213,7 +261,53 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         completionHandler([.banner, .badge, .sound])
     }
     
+    func dayToInt(day: String) -> Int {
+        var res: Int = 0
+        switch day {
+        case "Sunday":
+            res = 1
+        case "Monday":
+            res = 2
+        case "Tuesday":
+            res = 3
+        case "Wednesday":
+            res = 4
+        case "Thursday":
+            res = 5
+        case "Friday":
+            res = 6
+        case "Saturday":
+            res = 7
+        default:
+            res = 0
+        }
+        
+        return res
+    }
     
+    func intToDay(day: Int) -> String {
+        var res: String = ""
+        switch day {
+        case 1:
+            res = "Sunday"
+        case 2:
+            res = "Monday"
+        case 3:
+            res = "Tuesday"
+        case 4:
+            res = "Wednesday"
+        case 5:
+            res = "Thursday"
+        case 6:
+            res = "Friday"
+        case 7:
+            res = "Saturday"
+        default:
+            res = ""
+        }
+        
+        return res
+    }
 }
 
 // finds the file path to Library/Sounds
@@ -225,5 +319,11 @@ extension FileManager {
             try createDirectory(at: soundFolderURL, withIntermediateDirectories: true)
         }
         return soundFolderURL.appendingPathComponent(filename, isDirectory: false)
+    }
+}
+
+extension Date {
+    func dayNumberOfWeek() -> Int? {
+        return Calendar.current.dateComponents([.weekday], from: self).weekday
     }
 }
