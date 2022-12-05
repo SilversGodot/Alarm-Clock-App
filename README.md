@@ -16,8 +16,7 @@ iOS alarm clock app that is able to play a .wav file or youtube link as the alar
 - iCloud support requires a paid membership; for this project, we can be satisfied with downloading from a link
 
 ## To do:
-- Snooze function (able to snooze from a notification)
-- File truncation/repeat functionality (may not be possible, but would take a lot of time potentially)
+- Complete
 
 ## Deadlines:
 - Project description: 10/21
