@@ -162,7 +162,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         content.title = "Alarm!"
         // sound file must be in Library/Sounds
         content.sound = UNNotificationSound(named: UNNotificationSoundName(alarm.id.uuidString))
-        content.body = timeToString(time: alarm.time)
+        content.body = "It's time!"
         content.categoryIdentifier = "alarmCategory"
         
         
@@ -242,9 +242,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         var newAlarm = alarm
         newAlarm.snoozeCountCurrent += 1
-        newAlarm.time = alarm.time.advanced(by: TimeInterval(alarm.snoozeCountCurrent * (alarm.snoozeTimeMinutes * 60 + alarm.snoozeTimeSeconds)))
+        newAlarm.time = Date().advanced(by: TimeInterval(newAlarm.snoozeCountCurrent * (alarm.snoozeTimeMinutes * 60 + alarm.snoozeTimeSeconds)))
         
         scheduleAlarm(alarm: newAlarm)
+        print(newAlarm)
+        
     }
     
     func scheduleAlarmEarlyDismiss(alarm: Alarm) {
