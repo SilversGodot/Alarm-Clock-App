@@ -148,6 +148,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             return;
         }
         
+        UNUserNotificationCenter.current().delegate = ad
+
         if (alarm.soundURL != "") {
             downloadSoundFile(alarm: alarm)
         }
@@ -158,6 +160,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // sound file must be in Library/Sounds
         content.sound = UNNotificationSound(named: UNNotificationSoundName(alarm.id.uuidString))
         content.body = timeToString(time: alarm.time)
+        content.categoryIdentifier = "alarmCategory"
+        
         
         let targetDate = alarm.time
         let trigger = UNCalendarNotificationTrigger(

@@ -7,14 +7,30 @@
 
 import UIKit
 
+var ad = AppDelegate()
+
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
-
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        print("Setting up categories")
+        // Define Actions
+        let snoozeAction = UNNotificationAction(identifier: "snooze", title: "Snooze alarm", options: [])
+        let dismissAction = UNNotificationAction(identifier: "dismiss", title: "Dismiss alarm", options: [])
+        
+        
+        // Add actions
+        let category = UNNotificationCategory(identifier: "alarmCategory", actions: [snoozeAction, dismissAction], intentIdentifiers: [], options: [])
+        
+        // Add the category to Notification Framwork
+        UNUserNotificationCenter.current().setNotificationCategories([category])
         return true
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        if response.actionIdentifier == "snooze" {
+//            alarmController.scheduleAlarmSnooze(alarm: <#T##Alarm#>)
+        }
+        completionHandler()
     }
 
     // MARK: UISceneSession Lifecycle
