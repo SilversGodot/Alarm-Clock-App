@@ -10,7 +10,7 @@ import UserNotifications
 
 var alarmController = ViewController()
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UNUserNotificationCenterDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     var alarms: [Alarm] = [
@@ -80,7 +80,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound], completionHandler: { success, error in
             if success {
                 // schedule test
-                UNUserNotificationCenter.current().delegate = self
                 self.scheduleAlarms()
             }
             else if error != nil {
@@ -145,7 +144,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // schedules an individual alarm
     func scheduleAlarm(alarm: Alarm) {
         if (!alarm.active) {
-            return;
+            return
         }
         
         UNUserNotificationCenter.current().delegate = ad
@@ -168,7 +167,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             dateMatching: Calendar.current.dateComponents([.year, .month, .day, .hour, .minute],
             from: targetDate),
             repeats: false)
-
+        
         let request = UNNotificationRequest(
             identifier: alarm.id.uuidString,
             content: content,
@@ -178,6 +177,41 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 print("something went wrong")
             }
         })
+    }
+    
+    func rescheduleAlarm(alarm: Alarm) {
+        if (alarm.repeatDays.isEmpty) {
+            if let offset = alarmController.alarms.firstIndex(where: {$0.id.uuidString == alarm.id.uuidString}) {
+                alarmController.alarms[offset].active = false
+            }
+            return
+        }
+        
+        let currentDay = alarm.time.dayNumberOfWeek()!
+        var i: Int = 0
+        
+        let sortedRepeatedDays = alarm.repeatDays.sorted()
+        
+        for day in sortedRepeatedDays {
+            if day > currentDay {
+                break;
+            }
+            i += 1
+        }
+        
+        i = i % alarm.repeatDays.count
+        
+        let prevDay = currentDay
+        let newDay = sortedRepeatedDays[i]
+        var dayDiff = newDay - prevDay
+        if dayDiff <= 0 {
+            dayDiff += 7
+        }
+        
+        var newAlarm = alarm
+        newAlarm.time = alarm.time.advanced(by: TimeInterval(dayDiff * 60 * 60 * 24))
+
+        scheduleAlarm(alarm: newAlarm)
     }
     
     func scheduleAlarmSnooze(alarm: Alarm) {
@@ -208,31 +242,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             return
         }
 
-        let currentDay = alarm.time.dayNumberOfWeek()!
-        var i: Int = 0
-        
-        let sortedRepeatedDays = alarm.repeatDays.sorted()
-        
-        for day in sortedRepeatedDays {
-            if day > currentDay {
-                break;
-            }
-            i += 1
-        }
-        
-        i = i % alarm.repeatDays.count
-        
-        let prevDay = currentDay
-        let newDay = sortedRepeatedDays[i]
-        var dayDiff = newDay - prevDay
-        if dayDiff <= 0 {
-            dayDiff += 7
-        }
-        
-        var newAlarm = alarm
-        newAlarm.time = alarm.time.advanced(by: TimeInterval(dayDiff * 60 * 60 * 24))
-
-        scheduleAlarm(alarm: newAlarm)
+        rescheduleAlarm(alarm: alarm)
     }
     
     // unschedules an individual alarm
@@ -268,11 +278,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    // allows notifications while the app is open
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void)
-    {
-        completionHandler([.banner, .badge, .sound])
-    }
+
     
     func dayToInt(day: String) -> Int {
         var res: Int = 0

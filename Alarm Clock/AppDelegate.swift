@@ -26,11 +26,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return true
     }
     
+    // called when notification options are selected
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        // snoozing
         if response.actionIdentifier == "snooze" {
-//            alarmController.scheduleAlarmSnooze(alarm: <#T##Alarm#>)
+            if let alarm = alarmController.alarms.first(where: {$0.id.uuidString == response.notification.request.identifier}) {
+                alarmController.scheduleAlarmSnooze(alarm: alarm)
+            }
+        }
+        // dismiss
+        else {
+            if let alarm = alarmController.alarms.first(where: {$0.id.uuidString == response.notification.request.identifier}) {
+                // only reschedule if the alarm has repeat days
+                if (!alarm.repeatDays.isEmpty) {
+                    alarmController.rescheduleAlarm(alarm: alarm)
+                }
+            }
         }
         completionHandler()
+    }
+    
+    // allows notifications while the app is open
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void)
+    {
+        if let alarm = alarmController.alarms.first(where: {$0.id.uuidString == notification.request.identifier}) {
+            // only reschedule if the alarm has repeat days
+            if (!alarm.repeatDays.isEmpty) {
+                alarmController.rescheduleAlarm(alarm: alarm)
+            }
+        }
+        completionHandler([.banner, .badge, .sound])
+    }
+    
+    // called when a notification is delivered
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, ithCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) async
+    {
+        if let alarm = alarmController.alarms.first(where: {$0.id.uuidString == response.notification.request.identifier}) {
+            // only reschedule if the alarm has repeat days
+            if (!alarm.repeatDays.isEmpty) {
+                alarmController.rescheduleAlarm(alarm: alarm)
+            }
+        }
+        completionHandler([.banner, .badge, .sound])
     }
 
     // MARK: UISceneSession Lifecycle
