@@ -193,7 +193,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             return
         }
         
-        let currentDay = alarm.time.dayNumberOfWeek()!
+        let currentDay = Date().dayNumberOfWeek()!
         var i: Int = 0
         
         let sortedRepeatedDays = alarm.repeatDays.sorted()
@@ -214,8 +214,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             dayDiff += 7
         }
         
+        let date = Date()
+        let calendar = Calendar.current
+        var components = calendar.dateComponents([.year, .month, .day], from: date)
+        let alarmTime = calendar.dateComponents([.hour, .minute], from: alarm.time)
+        components.hour = alarmTime.hour
+        components.minute = alarmTime.minute
+        
         var newAlarm = alarm
-        newAlarm.time = alarm.time.advanced(by: TimeInterval(dayDiff * 60 * 60 * 24))
+        newAlarm.time = calendar.date(from: components)!.advanced(by: TimeInterval(dayDiff * 60 * 60 * 24))
         newAlarm.snoozeCountCurrent = 0
 
         alarmController.alarms[offset!] = newAlarm
