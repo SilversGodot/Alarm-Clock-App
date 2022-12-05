@@ -10,12 +10,14 @@ iOS alarm clock app that is able to play a .wav file or youtube link as the alar
 - Able to pull song from a youtube link. Possibly cache the song on-device so a wifi connection is not necessary.
 - Alarms can be cancelled early. E.g., if you wake up 5 minutes before the alarm, you can close it so it doesn't go off.
 
+## Discovered Limitations:
+- Apple does not allow interruption of the screen, as is with their alarm clock app; we can only use notifications
+- Notifications do not allow sounds to play beyond 30 seconds; there is no workaround
+- iCloud support requires a paid membership; for this project, we can be satisfied with downloading from a link
+
 ## To do:
 - Snooze function (able to snooze from a notification)
-- Support download from icloud (may need to rework a lot of things)
 - File truncation/repeat functionality (may not be possible, but would take a lot of time potentially)
-
-NOTE/UPDATE: every cloud service requires its own set of functions to download a file; only "naked" URLs are supported right now (URL where you only need to point to it to download a file)
 
 ## Deadlines:
 - Project description: 10/21
