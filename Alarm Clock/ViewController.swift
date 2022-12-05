@@ -66,6 +66,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     @objc func switchDidChange(_ sender: UISwitch) {
         alarmController.alarms[sender.tag].active = sender.isOn
+        rescheduleAlarm(alarm: alarmController.alarms[sender.tag])
+        if !alarmController.alarms[sender.tag].active {
+            unscheduleAlarm(s: alarmController.alarms[sender.tag].id.uuidString)
+        }
     }
     
     override func viewDidLoad() {
@@ -179,11 +183,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         })
     }
     
+    // generates a new alarm to be scheduled; also replaces the alarm in the alarms array
     func rescheduleAlarm(alarm: Alarm) {
         let offset = alarmController.alarms.firstIndex(where: {$0.id.uuidString == alarm.id.uuidString})
         
-        if (alarm.repeatDays.isEmpty) {
+        if (!alarm.active || alarm.repeatDays.isEmpty) {
             alarmController.alarms[offset!].active = false
+            alarmController.alarms[offset!].snoozeCountCurrent = 0
             return
         }
         
@@ -223,6 +229,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         
         if (!alarm.canSnooze || alarm.snoozeCountCurrent >= alarm.snoozeCountMax) {
+            rescheduleAlarm(alarm: alarm)
             return
         }
         
@@ -235,15 +242,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func scheduleAlarmEarlyDismiss(alarm: Alarm) {
         unscheduleAlarm(s: alarm.id.uuidString)
-        
-        if (!alarm.active) {
-            return;
-        }
-        
-        // one-time alarm does not need to be rescheduled
-        if (alarm.repeatDays.isEmpty) {
-            return
-        }
 
         rescheduleAlarm(alarm: alarm)
     }
